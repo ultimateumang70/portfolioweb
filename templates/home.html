@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Home - My Portfolio{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="container">
+        <h1>Welcome to My Portfolio</h1>
+        <p>Hi, I'm Umang! Explore my work and connect with me.</p>
+        <a href="/posts" class="btn btn-light btn-lg mt-3">View My Posts</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <!-- About Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-user fa-3x mb-3" style="color: #667eea;"></i>
+                    <h5 class="card-title">About Me</h5>
+                    <p class="card-text">Learn more about who I am and what I do.</p>
+                    <a href="/about" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Posts Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-pen-fancy fa-3x mb-3" style="color: #667eea;"></i>
+                    <h5 class="card-title">Community Posts</h5>
+                    <p class="card-text">Check out my latest posts and ideas.</p>
+                    <a href="/posts" class="btn btn-primary">View Posts</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Post Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-plus-circle fa-3x mb-3" style="color: #667eea;"></i>
+                    <h5 class="card-title">Create Post</h5>
+                    <p class="card-text">Share your thoughts with the community.</p>
+                    <a href="/create-post" class="btn btn-primary">Create Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Section -->
+    <div class="row mt-5 mb-5">
+        <div class="col-md-12">
+            <h2 class="mb-4">Featured</h2>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome to My Portfolio!</h5>
+                    <p class="card-text">This is your personal portfolio website where you can share your content, connect with others, and showcase your work. Feel free to customize everything to match your style!</p>
+                    <small class="text-muted">Get started by creating your first post or updating your About page.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

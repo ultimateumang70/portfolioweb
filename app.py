@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
 from pathlib import Path
+from authlib.integrations.flask_client import OAuth
 
 app = Flask(__name__)
 
@@ -20,6 +21,18 @@ Path(app.config['UPLOAD_FOLDER']).mkdir(parents=True, exist_ok=True)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 db = SQLAlchemy(app)
+
+# OAuth setup
+oauth = OAuth(app)
+google = oauth.register(
+    name='google',
+    client_id='YOUR_CLIENT_ID',
+    client_secret='YOUR_CLIENT_SECRET',
+    access_token_url='https://accounts.google.com/o/oauth2/token',
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+    api_base_url='https://www.googleapis.com/oauth2/v1/',
+    client_kwargs={'scope': 'openid email profile'}
+)
 
 # Database Models
 class Post(db.Model):
@@ -50,6 +63,11 @@ def posts():
 
 @app.route('/create-post', methods=['GET', 'POST'])
 def create_post():
+    # Restrict to admin Gmail
+    if session.get('email') != "your_admin@gmail.com":
+        flash("Only admin can create posts!", "danger")
+        return redirect(url_for('home'))
+
     if request.method == 'POST':
         title = request.form.get('title')
         content = request.form.get('content')
@@ -63,7 +81,6 @@ def create_post():
         if image_file and image_file.filename:
             if allowed_file(image_file.filename):
                 filename = secure_filename(image_file.filename)
-                # Add timestamp to make filename unique
                 filename = f"{datetime.utcnow().timestamp()}_{filename}"
                 image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 image_filename = filename
@@ -95,9 +112,12 @@ def like_post(post_id):
 
 @app.route('/post/<int:post_id>/delete', methods=['POST'])
 def delete_post(post_id):
+    # Restrict delete to admin Gmail
+    if session.get('email') != "your_admin@gmail.com":
+        flash("Only admin can delete posts!", "danger")
+        return redirect(url_for('home'))
+
     post = Post.query.get_or_404(post_id)
-    
-    # Delete image if it exists
     if post.image_filename:
         try:
             os.remove(os.path.join(app.config['UPLOAD_FOLDER'], post.image_filename))
@@ -116,12 +136,35 @@ def contact():
         name = request.form.get('name')
         email = request.form.get('email')
         message = request.form.get('message')
-        
-        # Here you can add email sending functionality
         flash(f'Thanks {name}! Your message has been received.', 'success')
         return redirect(url_for('contact'))
     
     return render_template('contact.html')
+
+# --- Login / Logout Routes ---
+@app.route('/login')
+def login():
+    redirect_uri = url_for('authorize', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+@app.route('/authorize')
+def authorize():
+    token = google.authorize_access_token()
+    user_info = google.get('userinfo').json()
+    session['email'] = user_info['email']
+
+    if session['email'] == "your_admin@gmail.com":
+        flash("Admin login successful!", "success")
+    else:
+        flash("Logged in, but not admin.", "info")
+
+    return redirect(url_for('home'))
+
+@app.route('/logout')
+def logout():
+    session.pop('email', None)
+    flash("Logged out!", "success")
+    return redirect(url_for('home'))
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -138,5 +181,4 @@ def internal_error(error):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    # Host on 0.0.0.0 to allow external connections (for deployment)
     app.run(host='0.0.0.0', port=5000, debug=False)

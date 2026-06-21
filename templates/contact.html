@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - My Portfolio{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="mb-4">Get In Touch</h1>
+
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text mb-4">
+                        Have a question or want to collaborate? Feel free to reach out! I'd love to hear from you.
+                    </p>
+
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="name" 
+                                name="name" 
+                                placeholder="Enter your name" 
+                                required
+                            >
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Your Email</label>
+                            <input 
+                                type="email" 
+                                class="form-control" 
+                                id="email" 
+                                name="email" 
+                                placeholder="your.email@example.com" 
+                                required
+                            >
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea 
+                                class="form-control" 
+                                id="message" 
+                                name="message" 
+                                rows="6" 
+                                placeholder="Write your message here..." 
+                                required
+                            ></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-envelope fa-2x mb-3" style="color: #667eea;"></i>
+                            <h5 class="card-title">Email</h5>
+                            <p class="card-text">your.email@example.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-map-marker-alt fa-2x mb-3" style="color: #667eea;"></i>
+                            <h5 class="card-title">Location</h5>
+                            <p class="card-text">Your City, Country</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-phone fa-2x mb-3" style="color: #667eea;"></i>
+                            <h5 class="card-title">Phone</h5>
+                            <p class="card-text">+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-5">
+                <h5>Connect on Social Media</h5>
+                <p class="mb-0">
+                    <a href="#" class="me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                    <a href="#" class="me-3"><i class="fab fa-github fa-lg"></i></a>
+                    <a href="#" class="me-3"><i class="fab fa-linkedin fa-lg"></i></a>
+                    <a href="#"><i class="fab fa-instagram fa-lg"></i></a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
